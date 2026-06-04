@@ -1,7 +1,11 @@
 package com.kh.semi.member.controller;
 
+import java.util.Map;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -88,12 +92,19 @@ public class MemberController {
 		// 3. 지금 요청을 보낸 사용자가 입력한 기존의 비밀번호가 DB에 저장된거랑 매칭이 잘 되는지 확인
 		// 4. 새로 입력한 비밀번호에 대해 암호화 작업
 		// DB에 가서 UPDATE
-		log.info("요청이 잘 넘어오는가 나는 누구인가 : {} / {}", user, upd);
+		log.info("요청이 잘 넘어오는가, 나는 누구인가 : {} / {}", user, upd);
 		memberService.changePassword(user, upd);
 		return ResponseEntity.ok().build();
 	}
 	
-	
+	@DeleteMapping
+	public ResponseEntity<Void> deleteByPassword(@RequestBody Map<String, String> password,
+												 @AuthenticationPrincipal CustomUserDetails user) {
+		
+		log.info("{}", password);
+		memberService.deleteByPassword(password.get("password"), user);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
 	
 	
 	
