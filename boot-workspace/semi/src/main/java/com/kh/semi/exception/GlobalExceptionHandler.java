@@ -1,5 +1,6 @@
 package com.kh.semi.exception;
 
+import java.security.InvalidParameterException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,6 +18,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+	
+	@ExceptionHandler(InvalidParameterException.class)
+	public ResponseEntity<ErrorResponse> handlerInvalidParameter(InvalidParameterException e) {
+		return ResponseEntity.badRequest().body(new ErrorResponse(400, e.getMessage(), null));
+	}
 	
 	@ExceptionHandler(CustomAuthenticationException.class)
 	public ResponseEntity<ErrorResponse> handlerAuthenticationError(CustomAuthenticationException e) {
